@@ -102,7 +102,6 @@ class NMT(nn.Module):
         # Convert list of lists into tensors
         source_padded = self.vocab.src.to_input_tensor(source, device=self.device)   # Tensor: (src_len, b)
         target_padded = self.vocab.tgt.to_input_tensor(target, device=self.device)   # Tensor: (tgt_len, b)
-
         ###     Run the network forward:
         ###     1. Apply the encoder to `source_padded` by calling `self.encode()`
         ###     2. Generate sentence masks for `source_padded` by calling `self.generate_sent_masks()`
@@ -256,7 +255,7 @@ class NMT(nn.Module):
         Y = self.model_embeddings.target(target_padded) # (tgt_len , b, e)
         for Y_t in torch.split(tensor=Y , split_size_or_sections=1):
             Y_t = torch.squeeze(Y_t)
-            Ybar_t = torch.cat((Y_t , o_prev),1) ######
+            Ybar_t = torch.cat((Y_t , o_prev),-1) ######
             dec_state , o_t ,e_t = self.step(Ybar_t= Ybar_t , dec_state=dec_state , enc_hiddens= enc_hiddens , \
                                                          enc_hiddens_proj= enc_hiddens_proj , enc_masks= enc_masks )
             combined_outputs.append(o_t)

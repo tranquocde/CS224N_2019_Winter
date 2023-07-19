@@ -162,7 +162,7 @@ def train(args: Dict):
 
             batch_size = len(src_sents)
 
-            example_losses = -model(src_sents, tgt_sents) # (batch_size,)
+            example_losses = -model(src_sents, tgt_sents) # (batch_size,) compute the negative log likelihood
             batch_loss = example_losses.sum()
             loss = batch_loss / batch_size
 
@@ -253,7 +253,7 @@ def train(args: Dict):
                         # reset patience
                         patience = 0
 
-                if epoch == int(args['--max-epoch']):
+                if epoch >= int(args['--max-epoch']):
                     print('reached maximum number of epochs!', file=sys.stderr)
                     exit(0)
 
